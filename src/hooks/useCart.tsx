@@ -26,8 +26,6 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
   const [cart, setCart] = useState<Product[]>(() => {
     const storagedCart = localStorage.getItem('@RocketShoes:cart') //Buscar dados do localStorage 
 
-    // debugger
-
     if (storagedCart) {
       return JSON.parse(storagedCart);//(como a funcao só aceita string ou null, precisa converter e depois reconverter para o array de produtos)
     }
@@ -74,9 +72,21 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
 
   const removeProduct = (productId: number) => {
     try {
-      // TODO
+      //verificar se o produto existe no carrinho
+      const updatedCart = [...cart]
+      const productIndex = updatedCart.findIndex(product => product.id === productId) //usa o findIndex para usar posteriormento o splice
+
+      //se ele encontrar o item no carrinho
+      if(productIndex >= 0) { //pq o productIndex retuna -1 
+        updatedCart.splice(productIndex, 1) //o splice add ou remove algum item do array. Neste caso, esta apagando 1 produto
+        setCart(updatedCart)
+        localStorage.setItem('@RocketShoes:cart', JSON.stringify(updatedCart))
+      } else {
+        //se ele nao encontrar o item no carrinho 
+        throw Error() //para sair do try e ir para o catch exibindo a mensagem de erro
+      }
     } catch {
-      // TODO
+      toast.error('Erro na remoção do produto');
     }
   };
 
@@ -85,9 +95,9 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
     amount,
   }: UpdateProductAmount) => {
     try {
-      // TODO
+      TODO
     } catch {
-      // TODO
+      TODO
     }
   };
 
